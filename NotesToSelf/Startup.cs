@@ -1,8 +1,12 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NotesToSelf.BLL.Services.Implementations;
+using NotesToSelf.BLL.Services.Interfaces;
+using NotesToSelf.BLL.ViewModels;
 using NotesToSelf.DAL.Contexts;
 using NotesToSelf.DAL.DataModels;
 using NotesToSelf.DAL.Repositories.Implementations;
@@ -22,16 +26,17 @@ namespace NotesToSelf
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // register identity server
-            services.AddIdentityServer().AddDeveloperSigningCredential();
-
             // register db contexts
-            services.AddDbContext<BaseContext<Note>>(opt => opt.UseInMemoryDatabase("NoteList"));
+            string conString = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<BaseContext<Note>>(opt => opt.UseSqlServer(conString));
 
             // register repositories
             services.AddTransient<IBaseRepository<Note>, BaseRepository<Note>>();
+            services.AddTransient<INoteService, NoteService>();
 
-            // register mvc
+            // register nuget and other services
+            services.AddIdentityServer().AddDeveloperSigningCredential();
+            services.AddAutoMapper();
             services.AddMvc();
         }
 
@@ -43,7 +48,10 @@ namespace NotesToSelf
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMvc();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute("default", "{controller=Notes}/{action=Index}/{id?}");
+            });
         }
     }
 }

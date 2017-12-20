@@ -1,4 +1,4 @@
-﻿namespace NotesToSelf.ViewModels
+﻿namespace NotesToSelf.BLL.ViewModels
 {
     public class NoteVm
     {
