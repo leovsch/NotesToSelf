@@ -1,6 +1,7 @@
 ﻿using System;
 using AutoMapper;
 using NotesToSelf.BLL.Services.Interfaces;
+using NotesToSelf.DAL.DataModels;
 using NotesToSelf.DAL.Repositories.Interfaces;
 
 namespace NotesToSelf.BLL.Services.Implementations
@@ -18,10 +19,15 @@ namespace NotesToSelf.BLL.Services.Implementations
 
         public T Add(T toAddd)
         {
-            //var mapped = _mapper.Map<TEntity>(toAddd);
-            //_baseRepository.Add(mapped);
-            //return _mapper.Map<T>(mapped);
-            throw new NotImplementedException();
+            BaseDataModel mapped = _mapper.Map<TEntity>(toAddd) as BaseDataModel;
+            if (mapped != null)
+            {
+                mapped.Id = Guid.NewGuid();
+                var toAdd = mapped as TEntity;
+                _baseRepository.Add(toAdd);
+                return _mapper.Map<T>(mapped);
+            }
+            throw new Exception();
         }
     }
 }
