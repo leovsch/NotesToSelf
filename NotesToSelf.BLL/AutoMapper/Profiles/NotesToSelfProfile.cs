@@ -9,6 +9,7 @@ namespace NotesToSelf.BLL.AutoMapper.Profiles
         public NotesToSelfProfile()
         {
             CreateMap<Note, NoteVm >();
+            CreateMap<NoteVm, Note>();
         }
     }
 }

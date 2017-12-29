@@ -19,7 +19,7 @@ namespace NotesToSelf.BLL.Services.Implementations
 
         public T Add(T toAddd)
         {
-            BaseDataModel mapped = _mapper.Map<TEntity>(toAddd) as BaseDataModel;
+            BaseDataModel mapped = _mapper.Map<T, TEntity>(toAddd) as BaseDataModel;
             if (mapped != null)
             {
                 mapped.Id = Guid.NewGuid();

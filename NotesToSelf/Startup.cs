@@ -1,12 +1,11 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NotesToSelf.BLL.AutoMapper.Config;
 using NotesToSelf.BLL.Services.Implementations;
 using NotesToSelf.BLL.Services.Interfaces;
-using NotesToSelf.BLL.ViewModels;
 using NotesToSelf.DAL.Contexts;
 using NotesToSelf.DAL.DataModels;
 using NotesToSelf.DAL.Repositories.Implementations;
@@ -36,7 +35,7 @@ namespace NotesToSelf
 
             // register nuget and other services
             services.AddIdentityServer().AddDeveloperSigningCredential();
-            services.AddAutoMapper();
+            AutoMapperConfig.ConfigAutoMapper(services);
             services.AddMvc();
         }
 
