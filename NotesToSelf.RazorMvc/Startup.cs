@@ -21,6 +21,18 @@ namespace NotesToSelf.RazorMvc
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultScheme = "cookie";
+                    options.DefaultChallengeScheme = "oidc";
+                })
+                .AddCookie("cookie")
+                .AddOpenIdConnect("oidc", options =>
+                {
+                    options.Authority = "https://api.notestoself.local/";
+                    options.ClientId = "openIdConnectClient";
+                    options.SignInScheme = "cookie";
+                });
             services.AddMvc();
         }
 
@@ -37,6 +49,7 @@ namespace NotesToSelf.RazorMvc
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            app.UseAuthentication();
             app.UseStaticFiles();
 
             app.UseMvc(routes =>
