@@ -16,6 +16,7 @@ using NotesToSelf.DAL.Contexts;
 using NotesToSelf.DAL.DataModels;
 using NotesToSelf.DAL.Repositories.Implementations;
 using NotesToSelf.DAL.Repositories.Interfaces;
+using NotesToSelf.Helpers;
 
 namespace NotesToSelf
 {
@@ -45,7 +46,7 @@ namespace NotesToSelf
                 .AddInMemoryIdentityResources(Resources.GetIdentityResources())
                 .AddInMemoryApiResources(Resources.GetApiResources())
                 .AddTestUsers(Users.Get())
-                .AddDeveloperSigningCredential();
+                .AddSigningCredential(CertHelper.GetDevCertificate());
 
             // register automapper
             AutoMapperConfig.ConfigAutoMapper(services);
@@ -61,7 +62,7 @@ namespace NotesToSelf
             }
 
             app.UseIdentityServer();
-
+            app.UseStaticFiles();
             app.UseMvc(routes =>
             {
                 routes.MapRoute("default", "{controller=Notes}/{action=Index}/{id?}");
@@ -96,6 +97,18 @@ namespace NotesToSelf
                     },
                     RedirectUris = new List<string> {"https://www.notestoself.local/signin-oidc"},
                     PostLogoutRedirectUris = new List<string> { "https://www.notestoself.local/" }
+                },
+                new Client
+                {
+                    ClientId = "myClient",
+                    ClientName = "My Custom Client",
+                    AccessTokenLifetime = 60 * 60 * 24,
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                    RequireClientSecret = false,
+                    AllowedScopes =
+                    {
+                        "myAPIs"
+                    }
                 }
             };
         }

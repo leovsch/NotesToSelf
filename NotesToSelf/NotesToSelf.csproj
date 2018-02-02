@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\NotesToSelf.BLL\NotesToSelf.BLL.csproj" />
     <ProjectReference Include="..\NotesToSelf.DAL\NotesToSelf.DAL.csproj" />
+    <ProjectReference Include="..\NotesToSelf.RazorMvc\NotesToSelf.RazorMvc.csproj" />
   </ItemGroup>
 
 </Project>
